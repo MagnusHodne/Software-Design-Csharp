@@ -3,6 +3,7 @@
 public class Logger
 {
     private readonly string _ownerClassName;
+    private static readonly object logLock = new object();
     public Logger(string ownerClassName) {
         _ownerClassName = ownerClassName;
     }
@@ -24,10 +25,13 @@ public class Logger
     
     private static void Log(string message, string type, ConsoleColor color, string className) {
         var datetime = DateTime.Now.ToString("hh:mm:ss");
-        Console.Write($"{datetime} [");
-        Console.ForegroundColor = color;
-        Console.Write($"{type}");
-        Console.ResetColor();
-        Console.Write($"] {className}: {message}\n");
+        lock(logLock)
+        {
+            Console.Write($"{datetime} [");
+            Console.ForegroundColor = color;
+            Console.Write($"{type}");
+            Console.ResetColor();
+            Console.Write($"] {className}: {message}\n");
+        }
     } 
 }

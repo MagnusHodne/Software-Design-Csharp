@@ -1,15 +1,15 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿namespace MultiThreadedConsoleApp;
 
-using MultiThreadedConsoleApp;
-
-class Program
+static class Program
 {
-    public static void Main(string[] args) {
-        Console.WriteLine("Starting the multi-threaded application");
-
+    public static void Main()
+    {
         Backend backend = new();
         Frontend frontend = new(backend);
-
-        frontend.Start();
+        Thread frontendThread = new(frontend.Start);
+        Thread backendThread = new(backend.Start);
+        
+        frontendThread.Start();
+        backendThread.Start();
     }
 }

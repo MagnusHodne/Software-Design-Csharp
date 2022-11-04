@@ -19,6 +19,8 @@ public class Frontend
     public String State => _backend.State;
 
     public void Start() {
+        _logger.Info("Starting frontend...");
+
         string? input;
         while ((input = Console.ReadLine()) != "q") {
             Console.WriteLine("Press q to exit");
