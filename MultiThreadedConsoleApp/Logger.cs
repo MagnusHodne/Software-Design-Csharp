@@ -2,30 +2,32 @@
 
 public class Logger
 {
-    private string _ownerClassName;
+    private readonly string _ownerClassName;
     public Logger(string ownerClassName) {
         _ownerClassName = ownerClassName;
     }
     public void Info(string message) {
-        Log(message, "INFO", ConsoleColor.Blue, _ownerClassName);
+        Log(message, "INFO ", ConsoleColor.Blue, _ownerClassName);
     }
 
     public void Debug(string message) {
-        Log(message, "INFO", ConsoleColor.Magenta, _ownerClassName);
+        Log(message, "DEBUG", ConsoleColor.Magenta, _ownerClassName);
     }
 
     public void Error(string message) {
-        Log(message, "INFO", ConsoleColor.Red, _ownerClassName);
+        Log(message, "ERROR", ConsoleColor.Red, _ownerClassName);
     }
 
     public void Warn(string message) {
-        Log(message, "INFO", ConsoleColor.Yellow, _ownerClassName);
+        Log(message, "WARN ", ConsoleColor.Yellow, _ownerClassName);
     }
     
     private static void Log(string message, string type, ConsoleColor color, string className) {
-        var prevColor = Console.ForegroundColor;
+        var datetime = DateTime.Now.ToString("hh:mm:ss");
+        Console.Write($"{datetime} [");
         Console.ForegroundColor = color;
-        Console.WriteLine($"[{type}] {className}: {message}");
-        Console.ForegroundColor = prevColor;
+        Console.Write($"{type}");
+        Console.ResetColor();
+        Console.Write($"] {className}: {message}\n");
     } 
 }
