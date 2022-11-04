@@ -1,0 +1,16 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MultiThreadedConsoleApp", "MultiThreadedConsoleApp\MultiThreadedConsoleApp.csproj", "{37D637D6-B915-4E9D-8B92-E247D8C4F08A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{37D637D6-B915-4E9D-8B92-E247D8C4F08A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{37D637D6-B915-4E9D-8B92-E247D8C4F08A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{37D637D6-B915-4E9D-8B92-E247D8C4F08A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{37D637D6-B915-4E9D-8B92-E247D8C4F08A}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
