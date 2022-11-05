@@ -6,12 +6,12 @@ public class Backend : IEventBroadcaster
     private readonly Dictionary<object, Action> _listeners = new();
     private bool _isRunning;
 
-    public string LastFunction {
+    public string State {
         get;
         private set;
     } = "";
 
-    public void RequestTheBackend(string functionName) {
+    public void RequestStateChange(string functionName) {
         // We're storing the function calls in a queue so that the backend doesn't have to execute the function immediately,
         // but can instead process them in batches at a later time
         _messageQueue.Enqueue(functionName);
@@ -29,7 +29,7 @@ public class Backend : IEventBroadcaster
                 var r = new Random();
                 // Simulating that the functions that the backend does might vary in execution time
                 Thread.Sleep(r.Next(15, 1500));
-                LastFunction = _messageQueue.Dequeue();
+                State = _messageQueue.Dequeue();
                 foreach (var onEventCallback in _listeners.Values)
                 {
                     onEventCallback();

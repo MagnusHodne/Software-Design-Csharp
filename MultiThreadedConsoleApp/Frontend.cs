@@ -6,27 +6,20 @@ public class Frontend
     private readonly Logger _logger = new (nameof(Frontend));
     
     // Using a simple lock to avoid garbled output to console
-    public static readonly object ConsoleLock = new();
     public Frontend(Backend backend) {
         _backend = backend;
     }
 
-    private static void WriteToConsole(string message, ConsoleColor color = ConsoleColor.White)
+    private static void WriteColored(string message, ConsoleColor color)
     {
-        lock(ConsoleLock)
-        {
-            Console.ForegroundColor = color;
-            Console.WriteLine(message);
-            Console.ResetColor();
-        }
+        Console.ForegroundColor = color;
+        Console.WriteLine(message);
+        Console.ResetColor();
     }
 
     private static void WriteToConsole(string message)
     {
-        lock(ConsoleLock)
-        {
-            Console.WriteLine(message);
-        }
+        Console.WriteLine(message);
     }
     
 
@@ -34,28 +27,40 @@ public class Frontend
         _logger.Info("Starting frontend...");
         _backend.SubscribeToBroadcaster(this, () =>
         {
-            Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine($"The backend did a thing and told me to let you know. It did \"{_backend.LastFunction}\"");
-            Console.ResetColor();
+            WriteColored($"The weather changed! It is now \"{_backend.State}\"",ConsoleColor.Blue);
         });
-
-        string? input;
+        
+        WriteColored("Change the weather!", ConsoleColor.Green);
+        WriteToConsole("Press 'r' for rain, 's' for sun, 'w' for wind, 'q' to quit");
+        char input;
         do
         {
-            WriteToConsole("Press q to exit");
-            input = Console.ReadLine();
-            if (input != null)
+            input = Console.ReadKey(true).KeyChar;
+            var mood = input switch
             {
-                _backend.RequestTheBackend(input);
-                WriteToConsole($"Requested function {input}");
+                'r' => "rainy",
+                's' => "sunny",
+                'w' => "windy",
+                'q' => "QUIT",
+                _ => ""
+            };
+            if (mood is "")
+            {
+                WriteColored("Invalid input, try again!", ConsoleColor.Red);
+                WriteToConsole("Press 'r' for rain, 's' for sun, 'w' for wind, 'q' to quit");
             }
-            else
+            else if (mood is not "QUIT")
             {
-                WriteToConsole("You didn't enter a command, try again!", ConsoleColor.Red);
+                _backend.RequestStateChange(mood);
+                WriteToConsole($"Requested weather change to {mood}");
             }
 
-        } while (input != "q");
-        //Not strictly necessary to unsubscribe the UI, but 
+        } while (input != 'q');
+        
+        
+        // Not strictly necessary to unsubscribe the UI since we're the only listener and the program is shutting down,
+        // but if the backend had other listeners and was kept running after the frontend stopped, the frontend wouldn't be
+        // garbage collected...
         _backend.UnsubscribeToBroadcaster(this);
         _backend.Stop();
         _logger.Info("Stopping frontend. Goodbye!");
