@@ -32,7 +32,7 @@ public class Backend : IEventBroadcaster
                 // Simulating that the functions that the backend does might vary in execution time
                 Thread.Sleep(r.Next(15, 2000));
                 LastFunction = _messageQueue.Dequeue();
-                _logger.Info($"Backend executed function \"{LastFunction}\"");
+                _logger.Info($"Executing \"{LastFunction}\"");
                 foreach (var onEventCallback in _listeners.Values)
                 {
                     onEventCallback();
@@ -47,13 +47,13 @@ public class Backend : IEventBroadcaster
         _logger.Info("Stopping backend");
     }
     
-    public void SubscribeToBroadcaster(object id, Action onEventCallback)
+    public void SubscribeToBroadcaster(object objectReference, Action onEventCallback)
     {
-        _listeners.Add(id, onEventCallback);
+        _listeners.Add(objectReference, onEventCallback);
     }
 
-    public void UnsubscribeToBroadcaster(object id)
+    public void UnsubscribeToBroadcaster(object objectReference)
     {
-        _listeners.Remove(id);
+        _listeners.Remove(objectReference);
     }
 }

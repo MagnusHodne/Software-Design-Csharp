@@ -6,6 +6,7 @@ static class Program
     {
         Backend backend = new();
         Frontend frontend = new(backend);
+        
         Thread frontendThread = new(frontend.Start);
         Thread backendThread = new(backend.Start);
         
