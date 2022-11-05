@@ -25,13 +25,10 @@ public class Logger
     
     private static void Log(string message, string type, ConsoleColor color, string className) {
         var datetime = DateTime.Now.ToString("hh:mm:ss");
-        lock(Frontend.ConsoleLock)
-        {
-            Console.Write($"{datetime} [");
-            Console.ForegroundColor = color;
-            Console.Write($"{type}");
-            Console.ResetColor();
-            Console.Write($"] {className}: {message}\n");
-        }
+        Console.Write($"{datetime} [");
+        Console.ForegroundColor = color;
+        Console.Write($"{type}");
+        Console.ResetColor();
+        Console.Write($"] {className}: {message}\n");
     } 
 }
