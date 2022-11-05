@@ -5,17 +5,10 @@ public class Frontend
     private readonly Backend _backend;
     private readonly Logger _logger = new (nameof(Frontend));
     
-    // Console.WriteLine isn't thread safe, so we need some sort of lock to
+    // Using a simple lock to avoid garbled output to console
     public static readonly object ConsoleLock = new();
     public Frontend(Backend backend) {
         _backend = backend;
-    }
-
-    public void DoFunc(string funcName) {
-        if (funcName == "SayHello") {
-            //SayHello();
-        }
-        _backend.RequestTheBackend(funcName);
     }
 
     private static void WriteToConsole(string message, ConsoleColor color = ConsoleColor.White)
@@ -41,7 +34,9 @@ public class Frontend
         _logger.Info("Starting frontend...");
         _backend.SubscribeToBroadcaster(this, () =>
         {
-            WriteToConsole($"The backend did a thing and told me to let you know. It did \"{_backend.LastFunction}\"", ConsoleColor.Green);
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine($"The backend did a thing and told me to let you know. It did \"{_backend.LastFunction}\"");
+            Console.ResetColor();
         });
 
         string? input;
@@ -51,7 +46,7 @@ public class Frontend
             input = Console.ReadLine();
             if (input != null)
             {
-                DoFunc(input);
+                _backend.RequestTheBackend(input);
                 WriteToConsole($"Requested function {input}");
             }
             else
