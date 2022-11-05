@@ -28,7 +28,7 @@ public class Backend : IEventBroadcaster
             {
                 var r = new Random();
                 // Simulating that the functions that the backend does might vary in execution time
-                Thread.Sleep(r.Next(15, 2000));
+                Thread.Sleep(r.Next(15, 1500));
                 LastFunction = _messageQueue.Dequeue();
                 foreach (var onEventCallback in _listeners.Values)
                 {
