@@ -3,7 +3,6 @@
 public class Backend : IEventBroadcaster
 {
     private readonly Queue<string> _messageQueue = new();
-    private readonly Logger _logger = new(nameof(Backend));
     private readonly Dictionary<object, Action> _listeners = new();
     private bool _isRunning;
 
@@ -20,7 +19,6 @@ public class Backend : IEventBroadcaster
 
     public void Start()
     {
-        _logger.Info("Starting backend...");
         _isRunning = true;
         while (_isRunning)
         {
@@ -32,7 +30,6 @@ public class Backend : IEventBroadcaster
                 // Simulating that the functions that the backend does might vary in execution time
                 Thread.Sleep(r.Next(15, 2000));
                 LastFunction = _messageQueue.Dequeue();
-                _logger.Info($"Executing \"{LastFunction}\"");
                 foreach (var onEventCallback in _listeners.Values)
                 {
                     onEventCallback();
@@ -44,7 +41,6 @@ public class Backend : IEventBroadcaster
     public void Stop()
     {
         _isRunning = false;
-        _logger.Info("Stopping backend");
     }
     
     public void SubscribeToBroadcaster(object objectReference, Action onEventCallback)
