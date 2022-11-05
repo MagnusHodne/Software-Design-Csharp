@@ -3,7 +3,7 @@
 public class Logger
 {
     private readonly string _ownerClassName;
-    private static readonly object LogLock = new();
+    
     public Logger(string ownerClassName) {
         _ownerClassName = ownerClassName;
     }
@@ -25,7 +25,7 @@ public class Logger
     
     private static void Log(string message, string type, ConsoleColor color, string className) {
         var datetime = DateTime.Now.ToString("hh:mm:ss");
-        lock(LogLock)
+        lock(Frontend.ConsoleLock)
         {
             Console.Write($"{datetime} [");
             Console.ForegroundColor = color;
